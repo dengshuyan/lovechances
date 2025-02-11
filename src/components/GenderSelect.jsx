@@ -13,7 +13,7 @@ export default function GenderSelect({ value = [], onChange }) {
     <div>
       <Typography variant="h2">I want to date...</Typography>
       <div className="space-y-3">
-        {['woman', 'man', 'nonBinary'].map((gender) => (
+        {['Woman', 'Man', 'nonBinary'].map((gender) => (
           <div
             key={gender}
             onClick={() => handleChange(gender)}
