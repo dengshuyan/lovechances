@@ -158,7 +158,7 @@ export default function Home({ userData, setUserData, setStep }) {
                   onChange={(e, newValue) => setUserData({ ...userData, selfAttractivenessRating: newValue })}
                   min={1}
                   max={10}
-                  customMinLabel="I have great personality"
+                  customMinLabel="My mom says I’m cute"
                   customMaxLabel="I break necks when I walk by"
                 />
               )}

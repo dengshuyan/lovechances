@@ -1,9 +1,5 @@
 export default function calculateMatches(userData) {
-  // Add debug logging
-  console.log('Starting calculation with userData:', userData);
-
   if (!userData || !userData.location) {
-    console.log('No userData or location data');
     return {
       percentage: 0,
       totalMatches: 0
@@ -12,26 +8,22 @@ export default function calculateMatches(userData) {
 
   const { location, genderPreference, ageRange, education, datingIntent } = userData;
   let matches = location.population;
-  console.log('Initial population:', matches);
 
   // 1. Gender Filter
   if (genderPreference && genderPreference.length > 0) {
     const genderRatio = genderPreference.reduce((sum, gender) => {
-      switch (gender) {
+      switch (gender.toLowerCase()) {
         case 'woman':
           return sum + location.demographics.female;
         case 'man':
           return sum + location.demographics.male;
-        case 'nonBinary':
-          // Estimate: Using 1.2% of population identifies as non-binary
-          // Based on recent demographic studies
+        case 'nonbinary':
           return sum + 0.012;
         default:
           return sum;
       }
     }, 0);
     matches *= genderRatio;
-    console.log('After gender filter:', matches);
   }
 
   // 2. Age Filter
@@ -39,7 +31,6 @@ export default function calculateMatches(userData) {
     const ageGroups = location.demographics.ageGroups;
     let ageRatio = 0;
     
-    // Calculate what percentage of each age group should be included
     Object.entries(ageGroups).forEach(([group, ratio]) => {
       const [min, max] = group.split('-').map(Number);
       if (min >= ageRange[0] && max <= ageRange[1]) {
@@ -48,7 +39,6 @@ export default function calculateMatches(userData) {
     });
     
     matches *= ageRatio;
-    console.log('After age filter:', matches);
   }
 
   // 3. Education Filter
@@ -58,20 +48,19 @@ export default function calculateMatches(userData) {
     
     switch (education) {
       case 'Any':
-        educationRatio = 1; // Include everyone
+        educationRatio = 1;
         break;
-      case 'Highschool':
-        educationRatio = eduDemo.highschool + eduDemo.college; // High school and above
+      case 'High School':
+        educationRatio = eduDemo.highschool + eduDemo.college;
         break;
       case 'College+':
-        educationRatio = eduDemo.college; // College and above
+        educationRatio = eduDemo.college;
         break;
       default:
         educationRatio = 1;
     }
     
     matches *= educationRatio;
-    console.log('After education filter:', matches);
   }
 
   // 4. Dating Intent Filter
@@ -83,18 +72,13 @@ export default function calculateMatches(userData) {
 
   if (datingIntent && datingIntentFactors[datingIntent]) {
     matches *= datingIntentFactors[datingIntent];
-    console.log('After dating intent filter:', matches);
   }
 
   // Final adjustment: assuming only a portion are actively dating
-  matches *= 0.3; // Assuming 30% of eligible people are actively dating
-  console.log('Final matches after 30% adjustment:', matches);
+  matches *= 0.3;
 
-  const result = {
+  return {
     percentage: ((matches / location.population) * 100).toFixed(2),
     totalMatches: Math.round(matches)
   };
-  console.log('Final result:', result);
-
-  return result;
 }
