@@ -23,38 +23,39 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Inter, sans-serif",
+    fontFamily: "'Inter', sans-serif",
     h1: {
       fontSize: "28px",
-      fontWeight: "400",
+      fontWeight: "300",
       lineHeight: 1.2,
       marginBottom: "16px"
     },
     h2: {
-      fontSize: "20px",
-      fontWeight: "400",
+      fontSize: "16px",
+      fontWeight: "500",
       marginBottom: "16px",
     },
     body1: {
       fontSize: "16px",
       fontWeight: "400",
-      color: "palette.grey[700]",
+      color: "#374151",
     },
     body2: {
       fontSize: "14px",
       fontWeight: "400",
-      color: "palette.grey[500]",
+      color: "#6B7280",
     },
     subtitle1: {
-      fontSize: "16px",
+      fontSize: "14px",
       fontWeight: "400",
-      color: "palette.grey[600]",
+      color: "#757575",
+      lineHeight: 1.4,
     },
     caption: {
       fontSize: "14px",
       fontWeight: "400",
       fontStyle: "italic",
-      color: "palette.grey[500]",
+      color: "#6B7280",
     }
   },
   components: {

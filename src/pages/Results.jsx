@@ -2,8 +2,16 @@ import calculateMatches from "../utils/calculateMatches";
 import Button from "../components/Button";
 import { Typography } from "@mui/material";
 
-export default function Results({ userData, setStep }) {
+export default function Results({ userData, setUserData, setStep }) {
   const estimatedMatches = calculateMatches(userData);
+
+  // Extract just the city name from the location
+  const getCityName = (location) => {
+    if (!location || !location.name) return "";
+    
+    // Split by comma and take the first part (city name)
+    return location.name.split(',')[0].trim();
+  };
 
   const getMatchMessage = (percentage) => {
     if (percentage >= 5) {
@@ -17,12 +25,27 @@ export default function Results({ userData, setStep }) {
     }
   };
 
+  const handleStartOver = () => {
+    // Reset all user data to initial state
+    setUserData({
+      location: "",
+      genderPreference: [],
+      ageRange: [25, 35],
+      education: "",
+      datingIntent: "",
+      looksPreference: "",
+      selfAttractivenessRating: 5,
+      socialSkills: ""
+    });
+    setStep(1);
+  };
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center">
-      <div className="w-full px-6 md:px-40">
-        <div className="text-center space-y-6">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-[800px] mx-auto px-4 sm:px-6 md:px-20 lg:px-20">
+        <div className="text-left space-y-6">
           <Typography variant="h1" className="leading-relaxed">
-            In {userData?.location?.name}, there are approximately{' '}
+            In {getCityName(userData?.location)}, there are approximately{' '}
             <Typography component="span" variant="h1" className="font-bold">
               {estimatedMatches.totalMatches.toLocaleString()}
             </Typography>{' '}
@@ -47,7 +70,7 @@ export default function Results({ userData, setStep }) {
             </Button>
             <Button 
               variant="outlined"
-              onClick={() => setStep(1)}
+              onClick={handleStartOver}
               className="w-[228px]"
             >
               Start Over

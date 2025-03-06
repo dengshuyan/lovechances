@@ -78,21 +78,21 @@ export default function Home({ userData, setUserData, setStep }) {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center">
-      <div className="w-full px-6 md:px-40">
-        <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between">
-          {/* Left Column */}
-          <div className="w-full md:w-1/3 text-left space-y-4">
+      <div className="w-full max-w-[1180px] mx-auto px-4 sm:px-6 md:px-20">
+        <div className="grid grid-cols-12 gap-8 md:gap-16 lg:gap-20">
+          {/* Left Column - Narrower (4/12 columns) */}
+          <div className="col-span-12 md:col-span-4 flex flex-col justify-center">
             <Typography variant="h1">
               What are your REAL chances of finding love?
             </Typography>
             <Typography variant="subtitle1">
-              We're using the <span className="font-semibold">Drake Equation</span>—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
+              We're using the Drake Equation—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
             </Typography>
           </div>
 
-          {/* Right Column */}
-          <div className="w-full md:w-2/3 md:ml-20">
-            <div className="w-full">
+          {/* Right Column - Wider (8/12 columns) */}
+          <div className="col-span-12 md:col-span-8 flex flex-col justify-center space-y-8 md:space-y-12">
+            <div className="space-y-4">
               {currentQuestion === 0 && (
                 <CityDropdown 
                   onSelect={(cityData) => setUserData({ ...userData, location: cityData })} 
@@ -158,7 +158,7 @@ export default function Home({ userData, setUserData, setStep }) {
                   onChange={(e, newValue) => setUserData({ ...userData, selfAttractivenessRating: newValue })}
                   min={1}
                   max={10}
-                  customMinLabel="My mom says I’m cute"
+                  customMinLabel="My mom says I'm cute"
                   customMaxLabel="I break necks when I walk by"
                 />
               )}
@@ -179,7 +179,9 @@ export default function Home({ userData, setUserData, setStep }) {
               {error && <ErrorMessage message={error} />}
               
               <div className="mt-6 flex justify-end">
-                <Button onClick={handleNext}>Next</Button>
+                <div className="w-[240px]">
+                  <Button onClick={handleNext}>Next</Button>
+                </div>
               </div>
             </div>
           </div>

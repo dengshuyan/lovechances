@@ -1,4 +1,4 @@
-import { Autocomplete, TextField, CircularProgress } from "@mui/material";
+import { Autocomplete, TextField, CircularProgress, Typography } from "@mui/material";
 import { useState, useCallback } from "react";
 
 // Default major cities to show initially
@@ -86,7 +86,7 @@ export default function CityDropdown({ onSelect }) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-2">Where do you live?</h2>
+      <Typography variant="h2">Where do you live?</Typography>
       <Autocomplete
         options={cities}
         loading={loading}
@@ -108,7 +108,6 @@ export default function CityDropdown({ onSelect }) {
             {...params} 
             label="Select City"
             variant="outlined"
-            helperText="Select from list or type to search more cities"
             InputProps={{
               ...params.InputProps,
               endAdornment: (

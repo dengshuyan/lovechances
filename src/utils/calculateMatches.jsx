@@ -6,7 +6,17 @@ export default function calculateMatches(userData) {
     };
   }
 
-  const { location, genderPreference, ageRange, education, datingIntent } = userData;
+  const { 
+    location, 
+    genderPreference, 
+    ageRange, 
+    education, 
+    datingIntent,
+    looksPreference,
+    selfAttractivenessRating,
+    socialSkills
+  } = userData;
+  
   let matches = location.population;
 
   // 1. Gender Filter
@@ -74,8 +84,39 @@ export default function calculateMatches(userData) {
     matches *= datingIntentFactors[datingIntent];
   }
 
-  // Final adjustment: assuming only a portion are actively dating
-  matches *= 0.3;
+  // 5. Looks Preference Filter
+  const looksPreferenceFactors = {
+    'Supermodel Only': 0.05,
+    'Decent Looking': 0.3,
+    'Personality Matters More': 0.65
+  };
+
+  if (looksPreference && looksPreferenceFactors[looksPreference]) {
+    matches *= looksPreferenceFactors[looksPreference];
+  }
+
+  // 6. Self-Attractiveness Rating Filter
+  if (selfAttractivenessRating) {
+    // Scale from 1-10 where higher rating means more matches
+    // But with diminishing returns (not linear)
+    const attractivenessRatio = Math.min(0.1 + (selfAttractivenessRating / 10) * 0.9, 1);
+    matches *= attractivenessRatio;
+  }
+
+  // 7. Social Skills Filter
+  const socialSkillsFactors = {
+    'Social butterfly': 0.8,
+    'Okay': 0.5,
+    'I make weird eye contact': 0.2
+  };
+
+  if (socialSkills && socialSkillsFactors[socialSkills]) {
+    matches *= socialSkillsFactors[socialSkills];
+  }
+
+  // 8. Single Rate - assuming only a portion of the population is single
+  const singleRate = 0.4; // 40% of people in the filtered age range are single
+  matches *= singleRate;
 
   return {
     percentage: ((matches / location.population) * 100).toFixed(2),
