@@ -86,9 +86,9 @@ export default function calculateMatches(userData) {
 
   // 5. Looks Preference Filter
   const looksPreferenceFactors = {
-    'Supermodel Only': 0.05,
-    'Decent Looking': 0.3,
-    'Personality Matters More': 0.65
+    'Supermodel Only': 0.1,
+    'Decent Looking': 0.4,
+    'Personality Matters More': 1
   };
 
   if (looksPreference && looksPreferenceFactors[looksPreference]) {
@@ -105,7 +105,7 @@ export default function calculateMatches(userData) {
 
   // 7. Social Skills Filter
   const socialSkillsFactors = {
-    'Social butterfly': 0.8,
+    'Social butterfly': 1,
     'Okay': 0.5,
     'I make weird eye contact': 0.2
   };

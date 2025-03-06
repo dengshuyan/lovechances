@@ -1,6 +1,7 @@
 import calculateMatches from "../utils/calculateMatches";
 import Button from "../components/Button";
 import { Typography } from "@mui/material";
+import { motion } from "framer-motion";
 
 export default function Results({ userData, setUserData, setStep }) {
   const estimatedMatches = calculateMatches(userData);
@@ -40,27 +41,60 @@ export default function Results({ userData, setUserData, setStep }) {
     setStep(1);
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-[800px] mx-auto px-4 sm:px-6 md:px-20 lg:px-20">
-        <div className="text-left space-y-6">
-          <Typography variant="h1" className="leading-relaxed">
-            In {getCityName(userData?.location)}, there are approximately{' '}
-            <Typography component="span" variant="h1" className="font-bold">
-              {estimatedMatches.totalMatches.toLocaleString()}
-            </Typography>{' '}
-            people who could be your true love, giving you a{' '}
-            <Typography component="span" variant="h1" className="font-bold">
-              {estimatedMatches.percentage}%
-            </Typography>{' '}
-            chance of finding them.
-          </Typography>
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <div className="w-full max-w-[800px] mx-auto px-4 sm:px-6 md:px-20">
+        <motion.div 
+          className="text-left space-y-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={itemVariants}>
+            <Typography variant="h1" className="leading-relaxed">
+              In {getCityName(userData?.location)}, there are approximately{' '}
+              <Typography component="span" variant="h1" className="font-bold">
+                {estimatedMatches.totalMatches.toLocaleString()}
+              </Typography>{' '}
+              people who could be your true love, giving you a{' '}
+              <Typography component="span" variant="h1" className="font-bold">
+                {estimatedMatches.percentage}%
+              </Typography>{' '}
+              chance of finding them.
+            </Typography>
+          </motion.div>
 
-          <Typography variant="caption" className="block">
-            {getMatchMessage(estimatedMatches.percentage)}
-          </Typography>
+          <motion.div variants={itemVariants}>
+            <Typography variant="caption" className="block">
+              {getMatchMessage(estimatedMatches.percentage)}
+            </Typography>
+          </motion.div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row justify-center gap-4 mt-12"
+          >
             <Button 
               variant="contained"
               onClick={() => {/* Add share functionality */}}
@@ -75,8 +109,8 @@ export default function Results({ userData, setUserData, setStep }) {
             >
               Start Over
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

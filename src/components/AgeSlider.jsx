@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
+import RangeSlider from "./RangeSlider";
 
 export default function AgeSlider({ userData, setUserData }) {
   // Ensure ageRange exists; if not, default to [25, 35]
@@ -12,19 +13,13 @@ export default function AgeSlider({ userData, setUserData }) {
 
   return (
     <div>
-      <Typography variant="h2">Age between</Typography>
-      <Slider
-        value={ageRange}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
+      <RangeSlider
+        title="Age between"
+        value={userData.ageRange || [25, 35]}
+        onChange={(event, newValue) => setUserData({ ...userData, ageRange: newValue })}
         min={18}
         max={60}
-        marks={[
-          { value: 18, label: '18' },
-          { value: 60, label: '60' }
-        ]}
       />
-     
     </div>
   );
 }

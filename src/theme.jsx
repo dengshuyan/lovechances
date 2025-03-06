@@ -36,7 +36,7 @@ const theme = createTheme({
       marginBottom: "16px",
     },
     body1: {
-      fontSize: "16px",
+      fontSize: "14px",
       fontWeight: "400",
       color: "#374151",
     },

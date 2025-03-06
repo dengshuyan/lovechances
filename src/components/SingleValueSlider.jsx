@@ -29,6 +29,9 @@ export default function SingleValueSlider({
             backgroundColor: 'transparent',
             color: 'text.primary',
             transform: 'translateY(-16px)',
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 500,
+            fontSize: '1rem',
             '&:before': {
               display: 'none'
             }
@@ -36,8 +39,8 @@ export default function SingleValueSlider({
         }}
       />
       <div className="flex justify-between mt-2 text-gray-500 text-sm">
-        <span className="max-w-[150px]">{customMinLabel || min}</span>
-        <span className="max-w-[150px] text-right">{customMaxLabel || max}</span>
+        <span className="max-w-[150px] font-inter">{customMinLabel || min}</span>
+        <span className="max-w-[150px] text-right font-inter">{customMaxLabel || max}</span>
       </div>
     </div>
   );
