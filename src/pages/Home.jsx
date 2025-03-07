@@ -102,21 +102,21 @@ export default function Home({ userData, setUserData, setStep }) {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center">
-      <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 md:px-20">
-        <div className="grid grid-cols-12 gap-8 md:gap-16 lg:gap-20">
+    <div className="min-h-screen w-full flex flex-col">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-20 pt-6 md:pt-0 flex-grow">
+        <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-16 lg:gap-20 md:min-h-screen md:items-center">
           {/* Left Column - Narrower (4/12 columns) */}
-          <div className="col-span-12 md:col-span-4 flex flex-col justify-center">
+          <div className="md:col-span-4 flex flex-col">
             <Typography variant="h1">
               What are your REAL chances of finding love?
             </Typography>
             <Typography variant="subtitle1">
-              We're using the <span className="font-semibold">Drake Equation</span>—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
+              We're using the Drake Equation—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
             </Typography>
           </div>
 
           {/* Right Column - Wider (8/12 columns) */}
-          <div className="col-span-12 md:col-span-8 flex flex-col justify-center space-y-8 md:space-y-12">
+          <div className="md:col-span-8 flex flex-col space-y-8 md:space-y-12">
             <div className="space-y-4">
               <div style={{ minHeight: "300px", position: "relative", display: "flex", alignItems: "center" }}>
                 <AnimatePresence mode="wait" custom={direction}>
@@ -220,12 +220,17 @@ export default function Home({ userData, setUserData, setStep }) {
               </div>
 
               {error && <ErrorMessage message={error} />}
-              
-              <div className="mt-6 flex justify-end">
-                <div className="w-[240px]">
-                  <Button onClick={handleNext}>Next</Button>
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Fixed bottom button for mobile */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white md:static md:p-0 md:bg-transparent">
+        <div className="w-full max-w-[800px] mx-auto">
+          <div className="md:flex md:justify-end">
+            <div className="w-full md:w-[240px]">
+              <Button onClick={handleNext} className="w-full">Next</Button>
             </div>
           </div>
         </div>

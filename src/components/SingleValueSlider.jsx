@@ -13,7 +13,7 @@ export default function SingleValueSlider({
 }) {
   return (
     <div>
-      <Typography variant="h2">{title}</Typography>
+      <Typography variant="h2" className="mb-8">{title}</Typography>
       <Slider
         value={value}
         onChange={onChange}
@@ -39,8 +39,8 @@ export default function SingleValueSlider({
         }}
       />
       <div className="flex justify-between mt-2 text-gray-500 text-sm">
-        <span className="max-w-[150px] font-inter">{customMinLabel || min}</span>
-        <span className="max-w-[150px] text-right font-inter">{customMaxLabel || max}</span>
+        <span className="max-w-[150px] font-inter whitespace-nowrap">{customMinLabel || min}</span>
+        <span className="max-w-[250px] text-right font-inter whitespace-nowrap">{customMaxLabel || max}</span>
       </div>
     </div>
   );
