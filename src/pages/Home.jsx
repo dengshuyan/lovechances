@@ -1,81 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import AgeSlider from "../components/AgeSlider";
 import CityDropdown from "../components/CityDropdown";
 import GenderSelect from "../components/GenderSelect";
 import SingleSelect from "../components/SingleSelect";
 import { Typography } from "@mui/material";
-import ErrorMessage from "../components/ErrorMessage";
 import RangeSlider from "../components/RangeSlider";
 import SingleValueSlider from "../components/SingleValueSlider";
 import { motion, AnimatePresence } from "framer-motion";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function Home({ userData, setUserData, setStep }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [error, setError] = useState("");
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
 
-  const validateStep = () => {
-    setError(""); // Clear previous error
+  // Check if current step is valid whenever userData or currentQuestion changes
+  useEffect(() => {
+    // Log the current state to help debug
+    console.log("Current question:", currentQuestion);
+    console.log("Current userData:", userData);
+    
+    let isDisabled = true;
     
     switch (currentQuestion) {
       case 0:
-        if (!userData.location) {
-          setError("Please select a city to continue");
-          return false;
-        }
+        isDisabled = !userData.location;
         break;
       case 1:
-        if (!userData.genderPreference || userData.genderPreference.length === 0) {
-          setError("Please select at least one gender preference");
-          return false;
-        }
+        isDisabled = !userData.genderPreference || userData.genderPreference.length === 0;
         break;
       case 2:
-        if (!userData.ageRange) {
-          setError("Please select an age range");
-          return false;
-        }
+        isDisabled = !userData.ageRange;
         break;
       case 3:
-        if (!userData.education) {
-          setError("Please select an education level");
-          return false;
-        }
+        isDisabled = !userData.education;
         break;
       case 4:
-        if (!userData.datingIntent) {
-          setError("Please select what you're looking for");
-          return false;
-        }
+        isDisabled = !userData.datingIntent;
         break;
       case 5:
-        if (!userData.looksPreference) {
-          setError("Please select how important looks are to you");
-          return false;
-        }
+        isDisabled = !userData.looksPreference;
         break;
       case 6:
-        // Remove validation for attractiveness since it has a default value
+        // Attractiveness has a default value, so always enabled
+        isDisabled = false;
         break;
       case 7:
-        if (!userData.socialSkills) {
-          setError("Please select your social skills level");
-          return false;
-        }
+        isDisabled = !userData.socialSkills;
         break;
+      default:
+        isDisabled = true;
     }
-    return true;
-  };
+    
+    console.log("Setting isNextDisabled to:", isDisabled);
+    setIsNextDisabled(isDisabled);
+  }, [userData, currentQuestion]);
 
   const handleNext = () => {
-    if (validateStep()) {
+    if (currentQuestion < 7) {
       setDirection(1);
-      if (currentQuestion < 7) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        setStep(2); // Move to results page
-      }
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setStep(2); // Move to results page
     }
   };
 
@@ -102,9 +89,9 @@ export default function Home({ userData, setUserData, setStep }) {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col">
-      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-20 pt-6 md:pt-0 flex-grow">
-        <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-16 lg:gap-20 md:min-h-screen md:items-center">
+    <div className="min-h-screen w-full flex flex-col justify-center">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-20 pt-6 md:pt-0">
+        <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-16 lg:gap-20 md:items-start">
           {/* Left Column - Narrower (4/12 columns) */}
           <div className="md:col-span-4 flex flex-col">
             <Typography variant="h1">
@@ -118,7 +105,7 @@ export default function Home({ userData, setUserData, setStep }) {
           {/* Right Column - Wider (8/12 columns) */}
           <div className="md:col-span-8 flex flex-col space-y-8 md:space-y-12">
             <div className="space-y-4">
-              <div style={{ minHeight: "300px", position: "relative", display: "flex", alignItems: "center" }}>
+              <div style={{ minHeight: "300px", position: "relative", display: "flex", alignItems: "flex-start" }}>
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={currentQuestion}
@@ -218,19 +205,62 @@ export default function Home({ userData, setUserData, setStep }) {
                   </motion.div>
                 </AnimatePresence>
               </div>
-
-              {error && <ErrorMessage message={error} />}
+              
+              {/* Desktop-only buttons */}
+              <div className="hidden md:flex md:justify-between md:items-center mt-6">
+                {currentQuestion > 0 ? (
+                  <div className="w-[60px]">
+                    <Button 
+                      variant="outlined" 
+                      onClick={handleBack} 
+                      className="w-full min-w-0 p-2"
+                    >
+                      <ArrowBackIcon />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="w-[60px]">{/* Empty div to maintain layout */}</div>
+                )}
+                <div className="w-[240px]">
+                <Button 
+                onClick={handleNext} 
+                className="w-full"
+                disabled={isNextDisabled}
+              >
+                    Next
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Fixed bottom button for mobile */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white md:static md:p-0 md:bg-transparent">
+      {/* Mobile-only fixed bottom buttons */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white md:hidden">
         <div className="w-full max-w-[800px] mx-auto">
-          <div className="md:flex md:justify-end">
-            <div className="w-full md:w-[240px]">
-              <Button onClick={handleNext} className="w-full">Next</Button>
+          <div className="flex justify-between gap-4">
+            {currentQuestion > 0 ? (
+              <div className="w-[60px]">
+                <Button 
+                  variant="outlined" 
+                  onClick={handleBack} 
+                  className="w-full min-w-0 p-2"
+                >
+                  <ArrowBackIcon />
+                </Button>
+              </div>
+            ) : (
+              <div className="w-[60px]">{/* Empty div to maintain layout */}</div>
+            )}
+            <div className="flex-1">
+            <Button 
+                onClick={handleNext} 
+                className="w-full"
+                disabled={isNextDisabled}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </div>
