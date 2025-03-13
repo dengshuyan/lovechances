@@ -1,5 +1,6 @@
 import { Autocomplete, TextField, CircularProgress, Typography } from "@mui/material";
 import { useState, useCallback } from "react";
+import SearchIcon from '@mui/icons-material/Search';
 
 // Default major cities to show initially
 const DEFAULT_CITIES = [
@@ -86,7 +87,7 @@ export default function CityDropdown({ onSelect }) {
 
   return (
     <div>
-      <Typography variant="h2">Where do you live?</Typography>
+      <Typography variant="h2" mb={4}>Where do you live?</Typography>
       <Autocomplete
         options={cities}
         loading={loading}
@@ -94,6 +95,7 @@ export default function CityDropdown({ onSelect }) {
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
+        fullWidth
         onInputChange={(event, newValue) => {
           setInputValue(newValue);
           fetchCities(newValue);
@@ -106,21 +108,25 @@ export default function CityDropdown({ onSelect }) {
         renderInput={(params) => (
           <TextField 
             {...params} 
-            label="Select City"
+            placeholder="Select City"
             variant="outlined"
+            fullWidth
             InputProps={{
               ...params.InputProps,
               endAdornment: (
-                <>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
+                <div style={{ position: 'absolute', right: '16px' }}>
+                  {loading ? <CircularProgress color="inherit" size={20} /> : <SearchIcon sx={{ color: 'text.secondary' }} />}
+                </div>
               ),
+              sx: {
+                paddingRight: '0px !important'
+              }
             }}
           />
         )}
         noOptionsText="No cities found"
         filterOptions={(x) => x}
+        popupIcon={null}
       />
     </div>
   );

@@ -2,6 +2,7 @@ import calculateMatches from "../utils/calculateMatches";
 import Button from "../components/Button";
 import { Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import ParticleVisualization from "../components/ParticleVisualization";
 
 export default function Results({ userData, setUserData, setStep }) {
   const estimatedMatches = calculateMatches(userData);
@@ -71,6 +72,13 @@ export default function Results({ userData, setUserData, setStep }) {
           initial="hidden"
           animate="visible"
         >
+          <motion.div variants={itemVariants} className="h-[280px] flex items-center justify-center">
+            <ParticleVisualization 
+              currentQuestion={7}
+              userData={userData}
+            />
+          </motion.div>
+
           <motion.div variants={itemVariants}>
             <Typography variant="h1" className="leading-relaxed">
               In {getCityName(userData?.location)}, there are approximately{' '}

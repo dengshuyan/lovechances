@@ -9,11 +9,21 @@ import RangeSlider from "../components/RangeSlider";
 import SingleValueSlider from "../components/SingleValueSlider";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ParticleVisualization from "../components/ParticleVisualization";
+import { calculateMatchPercentage } from "../utils/calculateMatches";
 
 export default function Home({ userData, setUserData, setStep }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const [isNextDisabled, setIsNextDisabled] = useState(true);
+  const [matchPercentage, setMatchPercentage] = useState(100);
+
+  // Calculate match percentage whenever userData changes
+  useEffect(() => {
+    const newPercentage = calculateMatchPercentage(userData, currentQuestion);
+    setMatchPercentage(newPercentage);
+  }, [userData, currentQuestion]);
 
   // Check if current step is valid whenever userData or currentQuestion changes
   useEffect(() => {
@@ -60,7 +70,7 @@ export default function Home({ userData, setUserData, setStep }) {
   const handleNext = () => {
     if (currentQuestion < 7) {
       setDirection(1);
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestion(prev => prev + 1);
     } else {
       setStep(2); // Move to results page
     }
@@ -69,7 +79,7 @@ export default function Home({ userData, setUserData, setStep }) {
   const handleBack = () => {
     if (currentQuestion > 0) {
       setDirection(-1);
-      setCurrentQuestion(currentQuestion - 1);
+      setCurrentQuestion(prev => prev - 1);
     }
   };
 
@@ -92,17 +102,43 @@ export default function Home({ userData, setUserData, setStep }) {
     <div className="min-h-screen w-full flex flex-col justify-center">
       <div className="w-full max-w-[1200px] mx-auto px-4 md:px-20 pt-6 md:pt-0">
         <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-16 lg:gap-20 md:items-start">
-          {/* Left Column - Narrower (4/12 columns) */}
+          {/* Left Column - Intro text or Visualization */}
           <div className="md:col-span-4 flex flex-col">
-            <Typography variant="h1">
-              What are your REAL chances of finding love?
-            </Typography>
-            <Typography variant="subtitle1">
-              We're using the Drake Equation—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
-            </Typography>
+            <AnimatePresence mode="wait">
+              {currentQuestion === 0 ? (
+                <motion.div
+                  key="intro"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Typography variant="h1">
+                    What are your REAL chances of finding love?
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    We're using the Drake Equation—originally designed to estimate the odds of finding life in the universe—to help you calculate your chances of finding real love in life.
+                  </Typography>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="visualization"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="h-[280px] flex items-center"
+                >
+                  <ParticleVisualization 
+                    currentQuestion={currentQuestion}
+                    userData={userData}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Right Column - Wider (8/12 columns) */}
+          {/* Right Column - Questions */}
           <div className="md:col-span-8 flex flex-col space-y-8 md:space-y-12">
             <div className="space-y-4">
               <div style={{ minHeight: "300px", position: "relative", display: "flex", alignItems: "flex-start" }}>
@@ -118,12 +154,13 @@ export default function Home({ userData, setUserData, setStep }) {
                       y: { type: "spring", stiffness: 300, damping: 30 },
                       opacity: { duration: 0.2 }
                     }}
-                    style={{ position: "absolute", width: "100%" }}
+                    style={{ position: "absolute", width: "100%", height: "100%" }}
+                    className={currentQuestion === 0 ? "pt-6" : ""}
                   >
                     {currentQuestion === 0 && (
-                      <CityDropdown 
-                        onSelect={(cityData) => setUserData({ ...userData, location: cityData })} 
-                      />
+                        <CityDropdown 
+                          onSelect={(cityData) => setUserData({ ...userData, location: cityData })} 
+                        />
                     )}
 
                     {currentQuestion === 1 && (
@@ -134,13 +171,15 @@ export default function Home({ userData, setUserData, setStep }) {
                     )}
 
                     {currentQuestion === 2 && (
-                      <RangeSlider
-                        title="Age between"
-                        value={userData.ageRange || [25, 35]}
-                        onChange={(e, newValue) => setUserData({ ...userData, ageRange: newValue })}
-                        min={18}
-                        max={60}
-                      />
+                      <div className="pt-6">
+                        <RangeSlider
+                          title="Age between"
+                          value={userData.ageRange || [25, 35]}
+                          onChange={(e, newValue) => setUserData({ ...userData, ageRange: newValue })}
+                          min={18}
+                          max={60}
+                        />
+                      </div>
                     )}
 
                     {currentQuestion === 3 && (
@@ -179,15 +218,17 @@ export default function Home({ userData, setUserData, setStep }) {
                     )}
 
                     {currentQuestion === 6 && (
-                      <SingleValueSlider
-                        title="Well, how attractive do YOU think you are?"
-                        value={userData.selfAttractivenessRating || 5}
-                        onChange={(e, newValue) => setUserData({ ...userData, selfAttractivenessRating: newValue })}
-                        min={1}
-                        max={10}
-                        customMinLabel="My mom says I'm cute"
-                        customMaxLabel="I break necks when I walk by"
-                      />
+                      <div className="pt-6">
+                        <SingleValueSlider
+                          title="Well, how attractive do YOU think you are?"
+                          value={userData.selfAttractivenessRating || 5}
+                          onChange={(e, newValue) => setUserData({ ...userData, selfAttractivenessRating: newValue })}
+                          min={1}
+                          max={10}
+                          customMinLabel="My mom says I'm cute"
+                          customMaxLabel="I break necks when I walk by"
+                        />
+                      </div>
                     )}
 
                     {currentQuestion === 7 && (
@@ -209,24 +250,35 @@ export default function Home({ userData, setUserData, setStep }) {
               {/* Desktop-only buttons */}
               <div className="hidden md:flex md:justify-between md:items-center mt-6">
                 {currentQuestion > 0 ? (
-                  <div className="w-[60px]">
+                  <div className="w-[44.5px]">
                     <Button 
                       variant="outlined" 
                       onClick={handleBack} 
-                      className="w-full min-w-0 p-2"
+                      fullWidth={false}
+                      className="w-[44.5px] h-[44.5px] min-w-0 p-0 rounded-full flex items-center justify-center"
+                      sx={{
+                        borderRadius: '50%',
+                        padding: 0,
+                        minWidth: '44.5px',
+                        width: '44.5px',
+                        height: '44.5px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                        }
+                      }}
                     >
-                      <ArrowBackIcon />
+                      <ChevronLeftIcon sx={{ fontSize: 20 }} />
                     </Button>
                   </div>
                 ) : (
-                  <div className="w-[60px]">{/* Empty div to maintain layout */}</div>
+                  <div className="w-[44.5px]">{/* Empty div to maintain layout */}</div>
                 )}
                 <div className="w-[240px]">
-                <Button 
-                onClick={handleNext} 
-                className="w-full"
-                disabled={isNextDisabled}
-              >
+                  <Button 
+                    onClick={handleNext} 
+                    className="w-full"
+                    disabled={isNextDisabled}
+                  >
                     Next
                   </Button>
                 </div>
@@ -239,22 +291,31 @@ export default function Home({ userData, setUserData, setStep }) {
       {/* Mobile-only fixed bottom buttons */}
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-white md:hidden">
         <div className="w-full max-w-[800px] mx-auto">
-          <div className="flex justify-between gap-4">
-            {currentQuestion > 0 ? (
-              <div className="w-[60px]">
+          <div className={`flex ${currentQuestion === 0 ? '' : 'justify-between gap-4'}`}>
+            {currentQuestion > 0 && (
+              <div className="w-[44.5px]">
                 <Button 
                   variant="outlined" 
                   onClick={handleBack} 
-                  className="w-full min-w-0 p-2"
+                  fullWidth={false}
+                  className="w-[44.5px] h-[44.5px] min-w-0 p-0 rounded-full flex items-center justify-center"
+                  sx={{
+                    borderRadius: '50%',
+                    padding: 0,
+                    minWidth: '44.5px',
+                    width: '44.5px',
+                    height: '44.5px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                    }
+                  }}
                 >
-                  <ArrowBackIcon />
+                  <ChevronLeftIcon sx={{ fontSize: 20 }} />
                 </Button>
               </div>
-            ) : (
-              <div className="w-[60px]">{/* Empty div to maintain layout */}</div>
             )}
-            <div className="flex-1">
-            <Button 
+            <div className={currentQuestion === 0 ? 'w-full' : 'flex-1'}>
+              <Button 
                 onClick={handleNext} 
                 className="w-full"
                 disabled={isNextDisabled}

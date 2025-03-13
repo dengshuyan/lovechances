@@ -11,8 +11,8 @@ export default function GenderSelect({ value = [], onChange }) {
 
   return (
     <div>
-      <Typography variant="h2">I want to date...</Typography>
-      <div className="space-y-3">
+      <Typography variant="h2" mb={2}>I want to date...</Typography>
+      <div className="space-y-4">
         {['Woman', 'Man', 'nonBinary'].map((gender) => (
           <div
             key={gender}

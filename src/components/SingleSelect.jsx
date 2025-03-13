@@ -4,8 +4,10 @@ import { Typography, Radio } from "@mui/material";
 export default function SingleSelect({ title, options, value, onChange }) {
   return (
     <div>
-      <Typography variant="h2">{title}</Typography>
-      <div className="space-y-3">
+      <Typography variant="h2" mb={2}>
+        {title}
+      </Typography>
+      <div className="space-y-4">
         {options.map((option) => (
           <div
             key={option}

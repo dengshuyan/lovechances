@@ -11,7 +11,7 @@ export default function RangeSlider({
 }) {
   return (
     <div>
-      <Typography variant="h2">{title}</Typography>
+      <Typography variant="h2" mb={4}>{title}</Typography>
       <Slider
         value={value}
         onChange={onChange}

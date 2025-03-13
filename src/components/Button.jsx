@@ -6,6 +6,7 @@ export default function Button({
   variant = "contained", 
   className = "",
   disabled = false,
+  fullWidth = true,
   ...props 
 }) {
   return (
@@ -13,7 +14,7 @@ export default function Button({
       onClick={onClick}
       variant={variant}
       color="primary"
-      className={`w-full ${className}`}
+      className={`${fullWidth ? 'w-full' : ''} ${className}`}
       disabled={disabled}
       {...props}
     >

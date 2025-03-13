@@ -13,7 +13,7 @@ export default function SingleValueSlider({
 }) {
   return (
     <div>
-      <Typography variant="h2" className="mb-8">{title}</Typography>
+      <Typography variant="h2" mb={4}>{title}</Typography>
       <Slider
         value={value}
         onChange={onChange}
