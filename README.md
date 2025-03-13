@@ -9,8 +9,6 @@ A web application that calculates your real chances of finding love using Census
 - **Real-time Census Data**: Utilizes the U.S. Census Bureau API to fetch accurate demographic information for your city
 - **Interactive Questionnaire**: Engaging step-by-step process to understand your preferences
 - **Dynamic Visualization**: Beautiful particle-based visualization that responds to your choices
-- **Responsive Design**: Seamless experience across desktop and mobile devices
-- **Modern UI/UX**: Built with Material-UI and Framer Motion for smooth animations
 
 
 ## 🛠️ Built With

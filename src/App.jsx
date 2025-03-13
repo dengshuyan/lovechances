@@ -2,6 +2,7 @@ import { useState } from "react";
 import Home from "./pages/Home";
 import Results from "./pages/Results";
 import { AnimatePresence, motion } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -63,6 +64,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Analytics />
     </div>
   );
 }
