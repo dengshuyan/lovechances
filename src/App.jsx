@@ -11,7 +11,6 @@ function App() {
     genderPreference: [],
     ageRange: [25, 35],
     education: "",
-    datingIntent: "",
     looksPreference: "",
     selfAttractivenessRating: 5,
     socialSkills: ""

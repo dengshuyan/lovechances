@@ -47,25 +47,7 @@ const calculateStepPercentage = (userData, currentQuestion) => {
         }
         break;
 
-      case 4: // Dating intent effect
-        if (userData.datingIntent) {
-          switch (userData.datingIntent) {
-            case "Serious Relationship":
-              stepMultiplier = 0.3; // 30% looking for serious
-              break;
-            case "Casual Fun":
-              stepMultiplier = 0.5; // 50% open to casual
-              break;
-            case "Still Figuring Out":
-              stepMultiplier = 0.8; // 80% might be compatible
-              break;
-            default:
-              stepMultiplier = 1;
-          }
-        }
-        break;
-
-      case 5: // Looks preference effect
+      case 4: // Looks preference effect
         if (userData.looksPreference) {
           switch (userData.looksPreference) {
             case "Supermodel Only":
@@ -83,13 +65,13 @@ const calculateStepPercentage = (userData, currentQuestion) => {
         }
         break;
 
-      case 6: // Self attractiveness rating effect
+      case 5: // Self attractiveness rating effect
         if (userData.selfAttractivenessRating) {
           stepMultiplier = userData.selfAttractivenessRating / 10;
         }
         break;
 
-      case 7: // Social skills effect
+      case 6: // Social skills effect
         if (userData.socialSkills) {
           switch (userData.socialSkills) {
             case "Social butterfly":

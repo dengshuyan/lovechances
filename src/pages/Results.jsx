@@ -1,11 +1,42 @@
-import calculateMatches from "../utils/calculateMatches";
+import { calculateMatchPercentage } from "../utils/calculateMatches";
 import Button from "../components/Button";
 import { Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import ParticleVisualization from "../components/ParticleVisualization";
 
 export default function Results({ userData, setUserData, setStep }) {
-  const estimatedMatches = calculateMatches(userData);
+  // Use the same calculation method as the particle visualization
+  const matchPercentage = calculateMatchPercentage(userData, 6); // Use 6 as we want to include all questions
+  
+  // Calculate the actual number of matches based on the percentage
+  const calculateTotalMatches = () => {
+    if (!userData || !userData.location) return 0;
+    
+    // Apply the percentage to the total population
+    const totalPopulation = userData.location.population;
+    const matches = (totalPopulation * matchPercentage / 100) * 0.4; // Apply 40% single rate
+    
+    // Ensure we show at least 1 match if there are any matches at all
+    // Only show 0 matches if the calculation truly results in 0
+    return matches > 0.01 ? Math.max(1, Math.round(matches)) : 0;
+  };
+  
+  const totalMatches = calculateTotalMatches();
+  
+  // Format percentage to show more decimal places for very small numbers
+  const formatPercentage = (percentage) => {
+    if (percentage < 0.0001) {
+      return percentage.toFixed(6);
+    } else if (percentage < 0.01) {
+      return percentage.toFixed(4);
+    } else if (percentage < 1) {
+      return percentage.toFixed(3);
+    } else {
+      return percentage.toFixed(2);
+    }
+  };
+  
+  const formattedPercentage = formatPercentage(matchPercentage);
 
   // Extract just the city name from the location
   const getCityName = (location) => {
@@ -34,7 +65,6 @@ export default function Results({ userData, setUserData, setStep }) {
       genderPreference: [],
       ageRange: [25, 35],
       education: "",
-      datingIntent: "",
       looksPreference: "",
       selfAttractivenessRating: 5,
       socialSkills: ""
@@ -74,7 +104,7 @@ export default function Results({ userData, setUserData, setStep }) {
         >
           <motion.div variants={itemVariants} className="h-[280px] flex items-center justify-center">
             <ParticleVisualization 
-              currentQuestion={7}
+              currentQuestion={6}
               userData={userData}
             />
           </motion.div>
@@ -83,11 +113,11 @@ export default function Results({ userData, setUserData, setStep }) {
             <Typography variant="h1" className="leading-relaxed">
               In {getCityName(userData?.location)}, there are approximately{' '}
               <Typography component="span" variant="h1" className="font-bold">
-                {estimatedMatches.totalMatches.toLocaleString()}
+                {totalMatches.toLocaleString()}
               </Typography>{' '}
               people who could be your true love, giving you a{' '}
               <Typography component="span" variant="h1" className="font-bold">
-                {estimatedMatches.percentage}%
+                {formattedPercentage}%
               </Typography>{' '}
               chance of finding them.
             </Typography>
@@ -95,7 +125,7 @@ export default function Results({ userData, setUserData, setStep }) {
 
           <motion.div variants={itemVariants}>
             <Typography variant="caption" className="block">
-              {getMatchMessage(estimatedMatches.percentage)}
+              {getMatchMessage(matchPercentage)}
             </Typography>
           </motion.div>
 

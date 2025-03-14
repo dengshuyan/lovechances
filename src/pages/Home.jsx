@@ -47,16 +47,13 @@ export default function Home({ userData, setUserData, setStep }) {
         isDisabled = !userData.education;
         break;
       case 4:
-        isDisabled = !userData.datingIntent;
-        break;
-      case 5:
         isDisabled = !userData.looksPreference;
         break;
-      case 6:
+      case 5:
         // Attractiveness has a default value, so always enabled
         isDisabled = false;
         break;
-      case 7:
+      case 6:
         isDisabled = !userData.socialSkills;
         break;
       default:
@@ -68,7 +65,7 @@ export default function Home({ userData, setUserData, setStep }) {
   }, [userData, currentQuestion]);
 
   const handleNext = () => {
-    if (currentQuestion < 7) {
+    if (currentQuestion < 6) {
       setDirection(1);
       setCurrentQuestion(prev => prev + 1);
     } else {
@@ -193,19 +190,6 @@ export default function Home({ userData, setUserData, setStep }) {
 
                     {currentQuestion === 4 && (
                       <SingleSelect
-                        title="What are you looking for?"
-                        options={[
-                          "Serious Relationship",
-                          "Casual Fun",
-                          "Still Figuring Out"
-                        ]}
-                        value={userData.datingIntent}
-                        onChange={(option) => setUserData({ ...userData, datingIntent: option })}
-                      />
-                    )}
-
-                    {currentQuestion === 5 && (
-                      <SingleSelect
                         title="How important is looks to you?"
                         options={[
                           "Supermodel Only",
@@ -217,7 +201,7 @@ export default function Home({ userData, setUserData, setStep }) {
                       />
                     )}
 
-                    {currentQuestion === 6 && (
+                    {currentQuestion === 5 && (
                       <div className="pt-6">
                         <SingleValueSlider
                           title="Well, how attractive do YOU think you are?"
@@ -231,7 +215,7 @@ export default function Home({ userData, setUserData, setStep }) {
                       </div>
                     )}
 
-                    {currentQuestion === 7 && (
+                    {currentQuestion === 6 && (
                       <SingleSelect
                         title="And how are your social skills?"
                         options={[
