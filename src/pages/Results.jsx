@@ -106,6 +106,9 @@ export default function Results({ userData, setUserData, setStep }) {
             <ParticleVisualization 
               currentQuestion={6}
               userData={userData}
+              resultsMode={true}
+              matchPercentage={matchPercentage}
+              totalMatches={totalMatches}
             />
           </motion.div>
 
